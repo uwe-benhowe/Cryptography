@@ -7,25 +7,25 @@ public class Practical3 {
     public static void main(String[] args) {
         
         //Input String
-        String input = "3745195840";
+        String input = "3945195876";
         int[] digits = new int[10];
         
         //Validation checking
         if (input.length() == 10) {
             if (input.matches("[0-9]+")) {
-                //Storeing input string in an array
+                //Storing input string in an array
                 for (int i = 0; i < digits.length; i++) {
                     digits[i] = Character.getNumericValue(input.charAt(i));
                 }
             }
         }
         
-        System.out.println("input: " + input);
+        System.out.println("Input: " + input);
 
         //Performing the BCH(10, 6) on the string
         int[] s = bch10(digits);
-        String syndromes = s[0] + "" + s[1] + "" + s[2] + "" + s[3];
-        System.out.println("Syndromes:" + syndromes);
+        String syndromes = s[0] + ", " + s[1] + ", " + s[2] + ", " + s[3];
+        
 
         //Loop through array to check if any values are 0
         boolean error = false;
@@ -33,13 +33,15 @@ public class Practical3 {
 
         //If there is an error...
         if (error) {      
+            System.out.println("Syndromes: " + syndromes);
+            
             //Work out p, q and r
             int p = mod((s[1] * s[1]) - (s[0] * s[2]));
             int q = mod((s[0] * s[3]) - (s[1] * s[2]));
             int r = mod((s[2] * s[2]) - (s[1] * s[3]));
 
             //If p, q, r are all 0 then one error exists
-            if (p == 0 && q == 0 && r == 0) {
+            if (p == 0 && q == 0 && r == 0) { //NOT DONE
                 //One Error
                 int errorPos = s[1] / s[0]; //Error position
                 int magnitude = s[0]; //Magnitude
@@ -47,26 +49,42 @@ public class Practical3 {
                 digits[errorPos] = digits[errorPos] - magnitude;
                 System.out.println("Single Error:" + Arrays.toString(digits));
                 
-            } else {
+            } else { //DONE
                 //Two Errors
+                System.out.println("PQR: " + p + ", " + q + ", " + r);
+                
                 //Positions
                 int i = quadratic(p, q, r, "plus");
                 int j = quadratic(p, q, r, "minus");
+                
+                System.out.println("Positions: " + i + ", " + j);
                 
                 //Magnitudes
                 int b = modFraction((i * s[0] - s[1]) , (i - j));
                 int a = mod(s[0] - b);
                 
-                //Replacing digits. (-1 as array starts from 0)
-                digits[i - 1] = digits[i - 1] + (mod(-a));
-                digits[j - 1] = digits[j - 1] + (mod(-b));
+                System.out.println("Magnitudes: " + a + ", " + b);
                 
-                System.out.println("Double Error: " + Arrays.toString(digits));
+                //Replacing digits. (-1 as array starts from 0)
+                digits[i - 1] = mod(digits[i - 1] + (mod(-a)));
+                digits[j - 1] = mod(digits[j - 1] + (mod(-b)));
+                
+                System.out.println("Double Error: " + atos(digits));
             }
-        } else {
+        } else { //DONE
             //No errors, so just print out origonal message
             System.out.println("No Error");
         }
+    }
+
+    public static String atos(int[] a) {
+
+        StringBuilder builder = new StringBuilder();
+        for (int value : a) {
+            builder.append(value);
+        }
+        String text = builder.toString();
+        return text;
     }
 
     public static int[] bch10(int[] d) {
@@ -81,7 +99,11 @@ public class Practical3 {
 
     public static int quadratic(int p, int q, int r, String flag) {
         int root = mod((q * q) - (4 * p * r));
-        int rooty = (int) Math.sqrt(root);
+        int rooty = modSquareRoot(root);
+  
+        if (rooty == 0) {
+            rooty = (int) Math.sqrt(root);
+        }
 
         int numerator = 0;   
         switch(flag){
@@ -93,9 +115,8 @@ public class Practical3 {
         return modFraction(numerator, denominator);
     }
     
-    
     public static int modFraction(int n, int d){  
-        return mod(mod(n) * inverseMod(d));
+        return mod(mod(n) * mod(inverseMod(d)));
     }
 
     public static int mod(int num) {
@@ -107,11 +128,20 @@ public class Practical3 {
         return num;
     }
 
-    public static int inverseMod(int x) {
+    public static int inverseMod(int x) { 
+        x = mod(x);
         int q = x;
         while (q % 11 != 1) {
             q += x;
         }
         return q / x;
+    }
+    
+    public static int modSquareRoot(int root) {
+        int x = 0;
+        while (((x * x) % 11) != root && x < 11) {
+            x++;
+        }
+        return mod(x);
     }
 }
