@@ -45,12 +45,7 @@ public class Practical4 {
   
 		try { 
 			System.out.println("SHA1 hash of string: " + Practical4.SHA1(rawString)); 
-		} catch (NoSuchAlgorithmException e) { 
-			// TODO Auto-generated catch block 
-			e.printStackTrace(); 
-		} catch (UnsupportedEncodingException e) { 
-			// TODO Auto-generated catch block 
-			e.printStackTrace(); 
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) { 
 		} 
 	} 
 }
