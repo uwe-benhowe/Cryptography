@@ -142,6 +142,11 @@ public class Practical3 extends javax.swing.JFrame {
                 txtaResults.append("Position: " + errorPos + "\n");
                 txtaResults.append("Magnitude: " + magnitude + "\n");
 
+                if (errorPos == 0) {
+                    txtaResults.append("More than two errors" + "\n\n");
+                    return;
+                }
+
                 digits[errorPos - 1] = mod(digits[errorPos - 1]) - mod(magnitude);
 
                 txtaResults.append("Single Error: " + atos(digits) + "\n\n");
@@ -154,7 +159,7 @@ public class Practical3 extends javax.swing.JFrame {
                 int i = quadratic(p, q, r, "plus");
                 int j = quadratic(p, q, r, "minus");
 
-                if (i == 0 || j == 0 || i - j == 0) {
+                if (i == 0 || j == 0 || i == j) {
                     txtaResults.append("More than two errors" + "\n\n");
                     return;
                 }
@@ -166,10 +171,20 @@ public class Practical3 extends javax.swing.JFrame {
                 int a = mod(s[0] - b);
 
                 txtaResults.append("Magnitudes: " + a + ", " + b + "\n");
- 
+
                 //Replacing digits. (-1 as array starts from 0)
-                digits[i - 1] = mod(digits[i - 1] + (mod(-a)));
-                digits[j - 1] = mod(digits[j - 1] + (mod(-b)));
+                int newNum1 = mod(digits[i - 1] + (mod(-a)));
+                int newNum2 = mod(digits[j - 1] + (mod(-b)));
+
+                if (newNum1 == 10 || newNum2 == 10) {
+                    txtaResults.append("More than two errors" + "\n\n");
+                    return;
+
+                } else {
+
+                    digits[i - 1] = newNum1;
+                    digits[j - 1] = newNum2;
+                }
 
                 txtaResults.append("Double Error: " + atos(digits) + "\n\n");
             }
@@ -229,6 +244,12 @@ public class Practical3 extends javax.swing.JFrame {
         }
 
         int denominator = mod(2 * p);
+
+        if (denominator == 0) {
+            //Divide by 0 error
+            return 0;
+        }
+
         return modFraction(numerator, denominator);
     }
 
