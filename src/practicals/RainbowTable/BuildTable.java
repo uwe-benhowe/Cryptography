@@ -5,8 +5,17 @@
  */
 package practicals.RainbowTable;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static practicals.BruteForce.BruteForce.SHA1;
 
 /**
  *
@@ -17,6 +26,18 @@ public class BuildTable extends javax.swing.JFrame {
     /**
      * Creates new form Interface
      */
+    
+    public BigInteger sizeOfPasswordSpace;
+    public static char[] submitedCharSet;
+    public static long chainLengthCounter;
+    public static long chainLength;
+    
+    
+    public static String startPassword;
+    public static String endHash;
+    
+    
+    public static String path =  "./src/practicals/RainbowTable/testChains.txt";
 
     public BuildTable() {
         initComponents();
@@ -69,6 +90,8 @@ public class BuildTable extends javax.swing.JFrame {
         sep2 = new javax.swing.JSeparator();
         lblRainbowProperties = new javax.swing.JLabel();
         lblTableProperties = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rainbow Table Generator");
@@ -168,12 +191,19 @@ public class BuildTable extends javax.swing.JFrame {
         lblDiskSpace.setText("0");
 
         btnGo.setText("GO!");
+        btnGo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoActionPerformed(evt);
+            }
+        });
 
         lblRainbowProperties.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblRainbowProperties.setText("Rainbow Table Properties");
 
         lblTableProperties.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblTableProperties.setText("Table Properties");
+
+        jLabel1.setText("Table Name");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -205,6 +235,7 @@ public class BuildTable extends javax.swing.JFrame {
                                         .addComponent(btnRemoveAllChars, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(sldMax, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                         .addComponent(sldMin, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addComponent(btnGo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblRainbowProperties)
@@ -222,16 +253,18 @@ public class BuildTable extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtChainCount, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblChainCount)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblCombinationsT)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblNumPos))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblDiskSpaceT)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblDiskSpace)))
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnGo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTextField1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblCombinationsT)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblNumPos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblDiskSpaceT)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDiskSpace)
+                        .addGap(126, 126, 126)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -275,16 +308,18 @@ public class BuildTable extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTableProperties)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNumPos)
-                    .addComponent(lblCombinationsT))
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNumPos)
+                    .addComponent(lblCombinationsT)
                     .addComponent(lblDiskSpaceT)
                     .addComponent(lblDiskSpace))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -346,6 +381,62 @@ public class BuildTable extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtChainCountActionPerformed
 
+    private void btnGoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoActionPerformed
+       
+        String charset = txtaCharSet.getText();
+        int min = sldMin.getValue();
+        int max = sldMax.getValue();
+        
+        sizeOfPasswordSpace = numPosibilities(charset, min, max);
+        submitedCharSet = charset.toCharArray();
+        chainLength = Long.parseLong(txtChainLength.getText());
+        int sum = asciCodeSum();
+
+        startPassword = "password";
+        chainLengthCounter = 0;
+        //ash(startPassword);
+        
+        
+    }//GEN-LAST:event_btnGoActionPerformed
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+    public static void writeLine(String password, String hash) throws IOException {
+        try (
+                FileWriter fw = new FileWriter(path, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw)) {
+
+            out.println(password + "." + hash);
+        } catch (IOException e) {
+            
+        }
+
+    }
+   
+    public static int asciCodeSum(){
+        char[] charset = submitedCharSet;
+        
+        int sum = 0;  
+        for (int i = 0; i < charset.length; i++) {
+            sum += charset[i];
+        }
+        return sum;
+    }
+    
     public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
         
@@ -373,32 +464,31 @@ public class BuildTable extends javax.swing.JFrame {
         return sb.toString();
     }
     
-    public static long numPosibilities(String input, int minLen, int maxLen){
-    
+    public static BigInteger numPosibilities(String input, int minLen, int maxLen){   
         long numChars = input.length();
         long count = 0;
+        BigInteger bigCount = BigInteger.valueOf(0);
         
         for (int i = minLen; i <= maxLen; i++) {
-            count += Math.pow(numChars, i);
+            count = (long) Math.pow(numChars, i);
+            bigCount = bigCount.add(BigInteger.valueOf(count));     
         }
-
-        if (count > Long.MAX_VALUE) {
-            return -1;
-        }
-        
-        return count;
-    
+      
+        return bigCount; 
     }
     
-    /**
-     * @param args the command line arguments
-     */
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -406,29 +496,12 @@ public class BuildTable extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BuildTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BuildTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BuildTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(BuildTable.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new BuildTable().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new BuildTable().setVisible(true);
         });
     }
 
@@ -439,6 +512,8 @@ public class BuildTable extends javax.swing.JFrame {
     private javax.swing.JButton btnRemoveAllChars;
     private javax.swing.JButton btnaz;
     private javax.swing.JComboBox<String> cmbHashType;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblChainCount;
     private javax.swing.JLabel lblChainLength;
     private javax.swing.JLabel lblCombinationsT;

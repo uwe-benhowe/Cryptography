@@ -5,6 +5,9 @@
  */
 package practicals.RainbowTable;
 
+import javax.swing.DefaultListModel;
+import static practicals.BruteForce.BruteForce.SHA1;
+
 /**
  *
  * @author Ben-PC
@@ -14,8 +17,12 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form Home
      */
+    public DefaultListModel lm;
+    
     public Home() {
         initComponents();
+        lm = new DefaultListModel();
+        
     }
 
     /**
@@ -28,24 +35,234 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        btnInsertTable = new javax.swing.JButton();
+        scrTables = new javax.swing.JScrollPane();
+        tblTables = new javax.swing.JTable();
+        btnRemoveTable = new javax.swing.JButton();
+        btnRemoveAllTables = new javax.swing.JButton();
+        lblRainbowTable = new javax.swing.JLabel();
+        sep1 = new javax.swing.JSeparator();
+        lblCrackHashes = new javax.swing.JLabel();
+        txtPlainText = new javax.swing.JTextField();
+        lblPlainText = new javax.swing.JLabel();
+        btnHash = new javax.swing.JButton();
+        lblHash = new javax.swing.JLabel();
+        txtHash = new javax.swing.JTextField();
+        btnAdd = new javax.swing.JButton();
+        lblHashes = new javax.swing.JLabel();
+        btnCrack = new javax.swing.JButton();
+        btnRemoveHash = new javax.swing.JButton();
+        btnRemoveAllHashes = new javax.swing.JButton();
+        scrHashes = new javax.swing.JScrollPane();
+        lstHashes = new javax.swing.JList<>();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnInsertTable.setText("Insert");
+        btnInsertTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertTableActionPerformed(evt);
+            }
+        });
+
+        tblTables.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Filename", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        scrTables.setViewportView(tblTables);
+        if (tblTables.getColumnModel().getColumnCount() > 0) {
+            tblTables.getColumnModel().getColumn(0).setResizable(false);
+            tblTables.getColumnModel().getColumn(1).setMinWidth(10);
+        }
+
+        btnRemoveTable.setText("Remove");
+
+        btnRemoveAllTables.setText("Remove All");
+
+        lblRainbowTable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblRainbowTable.setText("Rainbow Tables");
+
+        lblCrackHashes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblCrackHashes.setText("Crack Hashes");
+
+        lblPlainText.setText("Plaintext");
+
+        btnHash.setText("Hash");
+        btnHash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHashActionPerformed(evt);
+            }
+        });
+
+        lblHash.setText("Hash");
+
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        lblHashes.setText("Hashes to Crack");
+
+        btnCrack.setText("Crack");
+
+        btnRemoveHash.setText("Remove");
+        btnRemoveHash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveHashActionPerformed(evt);
+            }
+        });
+
+        btnRemoveAllHashes.setText("Remove All");
+        btnRemoveAllHashes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveAllHashesActionPerformed(evt);
+            }
+        });
+
+        scrHashes.setViewportView(lstHashes);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(sep1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(168, 168, 168)
+                        .addComponent(btnCrack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(scrHashes, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                    .addComponent(scrTables, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(lblHash)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtHash))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(lblPlainText)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPlainText)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnHash, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnRemoveTable)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemoveAllTables)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnInsertTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnRemoveHash)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRemoveAllHashes))
+                            .addComponent(lblRainbowTable)
+                            .addComponent(lblCrackHashes)
+                            .addComponent(lblHashes))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblRainbowTable)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrTables, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInsertTable)
+                    .addComponent(btnRemoveAllTables)
+                    .addComponent(btnRemoveTable))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sep1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCrackHashes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPlainText)
+                    .addComponent(txtPlainText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHash))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblHash)
+                    .addComponent(txtHash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblHashes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrHashes, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCrack)
+                    .addComponent(btnRemoveAllHashes)
+                    .addComponent(btnRemoveHash))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnInsertTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertTableActionPerformed
+        new BuildTable().setVisible(true); // Main Form to show after the Login Form..
+    }//GEN-LAST:event_btnInsertTableActionPerformed
+
+    private void btnHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHashActionPerformed
+        String input = txtPlainText.getText();
+        txtHash.setText(SHA1(input));
+    }//GEN-LAST:event_btnHashActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+      
+       lm.addElement(txtHash.getText());
+       lstHashes.setModel(lm);
+       
+       
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnRemoveHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveHashActionPerformed
+        lm.removeElement(lstHashes.getSelectedValue());
+    }//GEN-LAST:event_btnRemoveHashActionPerformed
+
+    private void btnRemoveAllHashesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveAllHashesActionPerformed
+        lm.removeAllElements();
+    }//GEN-LAST:event_btnRemoveAllHashesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -58,31 +275,45 @@ public class Home extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Home().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Home().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnCrack;
+    private javax.swing.JButton btnHash;
+    private javax.swing.JButton btnInsertTable;
+    private javax.swing.JButton btnRemoveAllHashes;
+    private javax.swing.JButton btnRemoveAllTables;
+    private javax.swing.JButton btnRemoveHash;
+    private javax.swing.JButton btnRemoveTable;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel lblCrackHashes;
+    private javax.swing.JLabel lblHash;
+    private javax.swing.JLabel lblHashes;
+    private javax.swing.JLabel lblPlainText;
+    private javax.swing.JLabel lblRainbowTable;
+    private javax.swing.JList<String> lstHashes;
+    private javax.swing.JScrollPane scrHashes;
+    private javax.swing.JScrollPane scrTables;
+    private javax.swing.JSeparator sep1;
+    private javax.swing.JTable tblTables;
+    private javax.swing.JTextField txtHash;
+    private javax.swing.JTextField txtPlainText;
     // End of variables declaration//GEN-END:variables
 }
