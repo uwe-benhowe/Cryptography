@@ -12,11 +12,11 @@ public class FileOperations {
      * the file.
      * @param s the name of the file ("RainbowTable.ser")
      */
-    public static void fileAvailable(String s) {
-        java.io.File p = new java.io.File(s);
-        if (!p.exists()) {
+    public static void fileExists(String s) {
+        java.io.File file = new java.io.File(s);
+        if (!file.exists()) {
             RainbowTable rainbowTable = new RainbowTable();
-            saveHashMapToFile(rainbowTable, s);
+            saveToFile(rainbowTable, s);
         }
     }
 
@@ -25,18 +25,18 @@ public class FileOperations {
      * @param r The rainbow table.
      * @param file The file to write to.
      */
-    public static void saveHashMapToFile(RainbowTable r, String file) {
+    public static void saveToFile(RainbowTable r, String file) {
         try {
-            FileOutputStream fos = new FileOutputStream(file);
+            FileOutputStream f = new FileOutputStream(file);
             
-            try (ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(r);
+            try (ObjectOutputStream o = new ObjectOutputStream(f)) {
+                o.writeObject(r);
             }
 
         } catch (FileNotFoundException e) {
-            e.toString();
+            System.out.println(e);
         } catch (IOException e) {
-            e.toString();
+            System.out.println(e);
         }
     }
 

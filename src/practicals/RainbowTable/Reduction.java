@@ -24,7 +24,9 @@ public class Reduction {
 
     public String reduce(String hashed, int pos) {
         BigInteger n = processHash(hashed);
+        
         n = n.shiftLeft(pos + 1);
+        
         n = n.mod(prime);
         return intToString(n.intValue(), alphabet);
     }

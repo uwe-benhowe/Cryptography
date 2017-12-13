@@ -13,16 +13,18 @@ public class TableGenerator {
     HashMap pairs = new HashMap<>();
     static Reduction redman = new Reduction();
 
+    
     public TableGenerator() {}
 
+    
     public TableGenerator(Reduction redMan) {
         this.redman = redMan;
         this.alphabet = redMan.alphabet;
         this.chainLength = redMan.chainLength;
         this.maxLength = redMan.maxLength;
-
     }
 
+    
     public static BigInteger passwordSpace(int sizeOfAlphabet, int maxLengthPassword) {
         BigInteger space = new BigInteger("0");
         for (int i = maxLengthPassword; i >= 0; i--) {
@@ -65,11 +67,7 @@ public class TableGenerator {
 
     }
 
-    /*
-        Creates map of start and end values of chains. 
-        End of chains are the Key and start of chains the value
-        Checks in place to avoid duplicate start and end values 
-     */
+    
     public HashMap createMap(int maxLength, int chainLength) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         BigInteger space = passwordSpace(alphabet.length(), maxLength);
         int num = numberOfChains(space, chainLength).intValue() + 1;
